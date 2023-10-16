@@ -3,18 +3,18 @@ class MazeMaker():
     def __init__(self):
         pass
 
-    def print_maze(self,maze):
+    def print_maze(self, maze):
         for row in maze:
             print(''.join(row))
 
-    def convert_maze_to_image(self,maze, wall_char='#', path_char=' ',searched_char='x'):
+    def convert_maze_to_image(self, maze, wall_char='#', path_char=' ', searched_char='x'):
         from PIL import Image
 
-        wall_color = (0, 0, 0)  # Siyah
-        path_color = (255, 255, 255)  # Beyaz
-        searched_color = (255,255,0)
+        wall_color = (0, 0, 0)
+        path_color = (255, 255, 255)
+        searched_color = (255, 255, 0)
 
-        cell_size = 30  # Her hücrenin boyutu (piksel cinsinden)
+        cell_size = 30 
 
         width = len(maze[0]) * cell_size
         height = len(maze) * cell_size
@@ -26,26 +26,22 @@ class MazeMaker():
                 if cell == path_char:
                     for dy in range(cell_size):
                         for dx in range(cell_size):
-                            image.putpixel((x * cell_size + dx, y * cell_size + dy), path_color)
+                            image.putpixel(
+                                (x * cell_size + dx, y * cell_size + dy), path_color)
                 elif cell == searched_char:
                     for ty in range(cell_size):
                         for tx in range(cell_size):
-                            image.putpixel((x * cell_size + tx, y * cell_size + ty), searched_color)
+                            image.putpixel(
+                                (x * cell_size + tx, y * cell_size + ty), searched_color)
 
         return image
 
 
-
-
-def maze_to_image(maze_for_image:list):
+def maze_to_image(maze_for_image: list):
     MazeApp = MazeMaker()
     maze = maze_for_image
-
     if maze:
-        print("Labirent:")
-        MazeApp.print_maze(maze)
-
+        # MazeApp.print_maze(maze)
         maze_image = MazeApp.convert_maze_to_image(maze)
-        maze_image.save('labirent_solved.png')  # Resmi kaydetmek için dosya adını değiştirin
-        print("Labirent resmi oluşturuldu ve 'labirent.png' olarak kaydedildi.")
-
+        maze_image.save('maze_solved.png')
+        print("Maze solved and saved as maze_solved.png")

@@ -1,10 +1,9 @@
-from time import sleep
 from mazemaker import maze_to_image
 
 class maze_solver:
     def __init__(self) -> None:
         self.labirent_vec = []
-        with open("labirent.txt","r") as file:
+        with open("labirent.txt", "r") as file:
             for line in file:
                 self.labirent_vec.append(line)
         self.start = ()
@@ -13,48 +12,46 @@ class maze_solver:
         self.nodes = []
         self.current = []
         self.explored = []
-        #print(self.raw_file)
-    #if " ", can go 
-    #if "#" can't pass 
+        # print(self.raw_file)
+    # if " ", can go
+    # if "#" can't pass
 
     def StartEndFind(self):
-        for y,row in enumerate(self.labirent_vec):
-            for x,col in enumerate(row):
+        for y, row in enumerate(self.labirent_vec):
+            for x, col in enumerate(row):
                 if col == "A":
-                    print(f"Başlangıç noktası:  {x}. column {y} .row")
-                    #self.labirent_vec[y][x] == "A"
-                    self.start = (x,y)
-                    self.current = (x,y)
+                    print(f"Start:  {x}. column {y} .row")
+                    # self.labirent_vec[y][x] == "A"
+                    self.start = (x, y)
+                    self.current = (x, y)
                 elif col == "B":
-                    print(f"Bitiş noktası:  {x}. column {y} .row")
-                    self.end = (x,y)
-        
+                    print(f"End:  {x}. column {y} .row")
+                    self.end = (x, y)
 
-    def CheckSurround(self,search="None"):     
+    def CheckSurround(self):
         x, y = self.current
         if x - 1 >= 0 and self.labirent_vec[y][x - 1] != "#":
             neighbor = (x - 1, y)
             if neighbor not in self.nodes and neighbor not in self.explored:
                 self.nodes.append(neighbor)
-                #print(f"left and ---CURRENT---> {self.current}")
+                # print(f"left and ---CURRENT---> {self.current}")
         if x + 1 < len(self.labirent_vec[y]) and self.labirent_vec[y][x + 1] != "#":
             neighbor = (x + 1, y)
             if neighbor not in self.nodes and neighbor not in self.explored:
                 self.nodes.append(neighbor)
-                #print(f"right and ---CURRENT---> {self.current}")
+                # print(f"right and ---CURRENT---> {self.current}")
         if y - 1 >= 0 and self.labirent_vec[y - 1][x] != "#":
             neighbor = (x, y - 1)
             if neighbor not in self.nodes and neighbor not in self.explored:
                 self.nodes.append(neighbor)
-                #print(f"down and ---CURRENT---> {self.current}")
+                # print(f"down and ---CURRENT---> {self.current}")
         if y + 1 < len(self.labirent_vec) and self.labirent_vec[y + 1][x] != "#":
             neighbor = (x, y + 1)
             if neighbor not in self.nodes and neighbor not in self.explored:
                 self.nodes.append(neighbor)
-                #print(f"up and ---CURRENT---> {self.current}")
+                # print(f"up and ---CURRENT---> {self.current}")
 
-
-    def Move(self):
+    def Move(self, search="Depth"):
         while not self.mazedone:
             self.CheckSurround()
             if self.current[0] == self.end[0] and self.current[1] == self.end[1]:
@@ -66,17 +63,24 @@ class maze_solver:
             except:
                 pass
             if not self.nodes:  # if cannot find any nodes, there isnt any end
-                print("Çözüm bulunamadı.")
+                print("Couldn't find any end point.")
                 break
-            self.current = self.nodes.pop()  # current is the next node
+            if search == "Depth":
+                self.current = self.nodes.pop()  # current is the next node
+            elif search == "Breadth":
+                if len(self.nodes) > 1:
+                    self.current = self.nodes[0]
+                    self.nodes = self.nodes[1:]
+                else:
+                    self.current = self.nodes.pop()
 
-    def FinalImage(self,show_explored=False):
+    def FinalImage(self, show_explored=False):
         foo = []
         # replacing " " with "x" to show explored
-        for y,row in enumerate(self.labirent_vec):
+        for y, row in enumerate(self.labirent_vec):
             foo.append((list(row)))
-            for x,col in enumerate(row):
-                dull = (x,y)
+            for x, col in enumerate(row):
+                dull = (x, y)
                 if dull in self.explored:
                     foo[y][x] = "x"
         maze_to_image(maze_for_image=foo)
@@ -84,6 +88,5 @@ class maze_solver:
 
 Solver = maze_solver()
 Solver.StartEndFind()
-Solver.Move()
+Solver.Move(search="Depth")
 Solver.FinalImage()
-
