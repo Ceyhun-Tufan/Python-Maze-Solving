@@ -81,7 +81,7 @@ class maze_solver:
             foo.append((list(row)))
             for x, col in enumerate(row):
                 dull = (x, y)
-                if dull in self.explored:
+                if dull in self.explored and foo[y][x] != "A":
                     foo[y][x] = "x"
         maze_to_image(maze_for_image=foo)
 

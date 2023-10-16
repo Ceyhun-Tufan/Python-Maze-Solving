@@ -7,13 +7,14 @@ class MazeMaker():
         for row in maze:
             print(''.join(row))
 
-    def convert_maze_to_image(self, maze, wall_char='#', path_char=' ', searched_char='x'):
-        from PIL import Image
+    def convert_maze_to_image(self, maze, wall_char='#', path_char=' ', searched_char='x',starting_char="A",ending_char="B"):
+        from PIL import Image,ImageDraw
 
         wall_color = (0, 0, 0)
         path_color = (255, 255, 255)
         searched_color = (255, 255, 0)
-
+        starting_color = (0,255,0)
+        ending_color = (255,0,0)
         cell_size = 30 
 
         width = len(maze[0]) * cell_size
@@ -28,6 +29,19 @@ class MazeMaker():
                         for dx in range(cell_size):
                             image.putpixel(
                                 (x * cell_size + dx, y * cell_size + dy), path_color)
+                elif cell == starting_char:
+                    for gy in range(cell_size):
+                        for gx in range(cell_size):
+                            image.putpixel(
+                                (x * cell_size + gx, y * cell_size + gy), starting_color)
+                
+                elif cell == ending_char:
+                    for zy in range(cell_size):
+                        for zx in range(cell_size):
+                            image.putpixel(
+                                (x * cell_size + zx, y * cell_size + zy), ending_color)
+                
+
                 elif cell == searched_char:
                     for ty in range(cell_size):
                         for tx in range(cell_size):
