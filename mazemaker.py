@@ -3,20 +3,11 @@ class MazeMaker():
     def __init__(self):
         pass
 
-    def read_maze_from_file(self,file_path):
-        try:
-            with open(file_path, 'r') as file:
-                maze = [list(line.strip()) for line in file.readlines()]
-            return maze
-        except FileNotFoundError:
-            print(f"Dosya bulunamadı: {file_path}")
-            return None
-
     def print_maze(self,maze):
         for row in maze:
             print(''.join(row))
 
-    def convert_maze_to_image(self,maze, wall_char='#', path_char=' ',searched_char='0'):
+    def convert_maze_to_image(self,maze, wall_char='#', path_char=' ',searched_char='x'):
         from PIL import Image
 
         wall_color = (0, 0, 0)  # Siyah
@@ -46,18 +37,15 @@ class MazeMaker():
 
 
 
-def maze_to_image():
-    maze_file = 'labirent.txt'  # Labirentin bulunduğu dosyanın adını değiştirin
+def maze_to_image(maze_for_image:list):
     MazeApp = MazeMaker()
-    maze = MazeApp.read_maze_from_file(maze_file)
+    maze = maze_for_image
 
     if maze:
         print("Labirent:")
         MazeApp.print_maze(maze)
 
         maze_image = MazeApp.convert_maze_to_image(maze)
-        maze_image.save('labirent.png')  # Resmi kaydetmek için dosya adını değiştirin
+        maze_image.save('labirent_solved.png')  # Resmi kaydetmek için dosya adını değiştirin
         print("Labirent resmi oluşturuldu ve 'labirent.png' olarak kaydedildi.")
 
-
-maze_to_image()

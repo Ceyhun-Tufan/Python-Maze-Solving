@@ -1,4 +1,5 @@
 from time import sleep
+from mazemaker import maze_to_image
 
 class maze_solver:
     def __init__(self) -> None:
@@ -13,8 +14,8 @@ class maze_solver:
         self.current = []
         self.explored = []
         #print(self.raw_file)
-    #eğer " " ise geçilebilir
-    #eğer # ise duvar
+    #if " ", can go 
+    #if "#" can't pass 
 
     def StartEndFind(self):
         for y,row in enumerate(self.labirent_vec):
@@ -31,7 +32,6 @@ class maze_solver:
 
     def CheckSurround(self,search="None"):     
         x, y = self.current
-        # Kontrolleri daha doğru bir şekilde yapın
         if x - 1 >= 0 and self.labirent_vec[y][x - 1] != "#":
             neighbor = (x - 1, y)
             if neighbor not in self.nodes and neighbor not in self.explored:
@@ -60,19 +60,30 @@ class maze_solver:
             if self.current[0] == self.end[0] and self.current[1] == self.end[1]:
                 print("Done.")
                 break
-            print(self.current)
-            print(self.explored)
             self.explored.append(self.current)
             try:
                 self.nodes.remove(self.current)
             except:
                 pass
-            if not self.nodes:  # Eğer düğüm kalmazsa çözüm yok demektir.
+            if not self.nodes:  # if cannot find any nodes, there isnt any end
                 print("Çözüm bulunamadı.")
                 break
-            self.current = self.nodes.pop()  # Bir sonraki düğümü al
+            self.current = self.nodes.pop()  # current is the next node
+
+    def FinalImage(self,show_explored=False):
+        foo = []
+        # replacing " " with "x" to show explored
+        for y,row in enumerate(self.labirent_vec):
+            foo.append((list(row)))
+            for x,col in enumerate(row):
+                dull = (x,y)
+                if dull in self.explored:
+                    foo[y][x] = "x"
+        maze_to_image(maze_for_image=foo)
+
 
 Solver = maze_solver()
 Solver.StartEndFind()
 Solver.Move()
+Solver.FinalImage()
 
