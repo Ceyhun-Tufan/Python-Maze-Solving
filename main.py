@@ -43,7 +43,7 @@ class maze_solver:
     def Move(self, search="Depth"):
         while not self.mazedone:
             self.CheckSurround()
-            if self.current[0] == self.end[0] and self.current[1] == self.end[1]:
+            if self.current == self.end:
                 print("Done.")
                 break
             self.explored.append(self.current)
