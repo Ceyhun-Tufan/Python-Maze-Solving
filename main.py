@@ -30,26 +30,15 @@ class maze_solver:
 
     def CheckSurround(self):
         x, y = self.current
-        if x - 1 >= 0 and self.labirent_vec[y][x - 1] != "#":
-            neighbor = (x - 1, y)
-            if neighbor not in self.nodes and neighbor not in self.explored:
-                self.nodes.append(neighbor)
-                # print(f"left and ---CURRENT---> {self.current}")
-        if x + 1 < len(self.labirent_vec[y]) and self.labirent_vec[y][x + 1] != "#":
-            neighbor = (x + 1, y)
-            if neighbor not in self.nodes and neighbor not in self.explored:
-                self.nodes.append(neighbor)
-                # print(f"right and ---CURRENT---> {self.current}")
-        if y - 1 >= 0 and self.labirent_vec[y - 1][x] != "#":
-            neighbor = (x, y - 1)
-            if neighbor not in self.nodes and neighbor not in self.explored:
-                self.nodes.append(neighbor)
-                # print(f"down and ---CURRENT---> {self.current}")
-        if y + 1 < len(self.labirent_vec) and self.labirent_vec[y + 1][x] != "#":
-            neighbor = (x, y + 1)
-            if neighbor not in self.nodes and neighbor not in self.explored:
-                self.nodes.append(neighbor)
-                # print(f"up and ---CURRENT---> {self.current}")
+        neighbors = [(x - 1, y),(x + 1, y),(x, y - 1),(x, y + 1)]
+
+        for neighbor_x, neighbor_y in neighbors:
+            if 0 <= neighbor_x < len(self.labirent_vec[y]) and 0 <= neighbor_y < len(self.labirent_vec):
+                neighbor_char = self.labirent_vec[neighbor_y][neighbor_x]
+
+                if neighbor_char != "#" and (neighbor_x, neighbor_y) not in self.nodes and (neighbor_x, neighbor_y) not in self.explored:
+                    self.nodes.append((neighbor_x, neighbor_y))
+
 
     def Move(self, search="Depth"):
         while not self.mazedone:
@@ -67,7 +56,7 @@ class maze_solver:
                 break
             if search == "Depth":
                 self.current = self.nodes.pop()  # current is the next node
-            elif search == "Breadth":
+            else:
                 if len(self.nodes) > 1:
                     self.current = self.nodes[0]
                     self.nodes = self.nodes[1:]
