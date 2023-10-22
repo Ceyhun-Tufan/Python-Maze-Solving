@@ -1,5 +1,12 @@
 from mazemaker import maze_to_image
 
+class Node():
+    def __init__(self, state, parent, action):
+        self.state = state
+        self.parent = parent
+        self.action = action
+
+
 class maze_solver:
     def __init__(self) -> None:
         self.labirent_vec = []
@@ -16,7 +23,7 @@ class maze_solver:
     # if " ", can go
     # if "#" can't pass
 
-    def StartEndFind(self):
+    def StartEndFind(self) -> None:
         for y, row in enumerate(self.labirent_vec):
             for x, col in enumerate(row):
                 if col == "A":
@@ -28,7 +35,7 @@ class maze_solver:
                     print(f"End:  {x}. column {y} .row")
                     self.end = (x, y)
 
-    def CheckSurround(self):
+    def CheckSurround(self) -> None:
         x, y = self.current
         neighbors = [(x - 1, y),(x + 1, y),(x, y - 1),(x, y + 1)]
 
@@ -40,7 +47,7 @@ class maze_solver:
                     self.nodes.append((neighbor_x, neighbor_y))
 
 
-    def Move(self, search="Depth"):
+    def Move(self, search="Depth") -> None:
         while not self.mazedone:
             self.CheckSurround()
             if self.current == self.end:
@@ -63,7 +70,7 @@ class maze_solver:
                 else:
                     self.current = self.nodes.pop()
 
-    def FinalImage(self, show_explored=False):
+    def FinalImage(self, show_explored=False) -> None:
         foo = []
         # replacing " " with "x" to show explored
         for y, row in enumerate(self.labirent_vec):
